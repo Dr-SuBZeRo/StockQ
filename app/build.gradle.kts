@@ -9,7 +9,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.subzero.stockq"
+        applicationId = "com.stockq"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

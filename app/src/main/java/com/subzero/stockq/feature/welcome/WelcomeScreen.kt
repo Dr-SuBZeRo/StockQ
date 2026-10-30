@@ -1,5 +1,7 @@
 package com.subzero.stockq.feature.welcome
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.subzero.stockq.R
@@ -27,6 +31,9 @@ fun WelcomeScreen(
     onGetStarted: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
+    val logoRes = if (isDark) R.drawable.stockq_logo_dark else R.drawable.stockq_logo_light
+
     Scaffold(
         topBar = {
             StockQTopBar(title = stringResource(R.string.title_welcome))
@@ -45,28 +52,47 @@ fun WelcomeScreen(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.surfaceVariant
                 ),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
                     modifier = Modifier.padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "StockQ",
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = MaterialTheme.colorScheme.primary
+                    Image(
+                        painter = painterResource(id = logoRes),
+                        contentDescription = "StockQ Brand Logo",
+                        modifier = Modifier
+                            .height(72.dp)
+                            .fillMaxWidth()
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Text(
-                        text = "By SuBZeRo",
+                        text = "Developed by SuBZeRo",
                         style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.secondary
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
                     Text(
                         text = stringResource(R.string.privacy_tagline),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = "100% Offline • Zero Tracking • Zero Ads\nYour Business. Your Data. Your Control.",
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -80,7 +106,7 @@ fun WelcomeScreen(
                     .height(52.dp)
             ) {
                 Text(
-                    text = "Go to Dashboard",
+                    text = "Launch Dashboard",
                     style = MaterialTheme.typography.titleMedium
                 )
             }
