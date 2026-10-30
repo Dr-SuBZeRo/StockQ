@@ -83,3 +83,4 @@ Room database with 23 entities and 18 DAOs:
   - Version: `1.0.0` (code `1`)
   - Permissions: `uses-permission: name='com.stockq.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'`
   - `android.permission.INTERNET`: **ABSENT**
+

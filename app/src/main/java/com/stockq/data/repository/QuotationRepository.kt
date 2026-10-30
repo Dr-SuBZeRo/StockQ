@@ -124,7 +124,7 @@ class QuotationRepository(
         val quoteWithItems = quotationDao.getQuotationWithItemsById(quotationId)
             ?: return@withTransaction Result.failure(IllegalArgumentException("Quotation #$quotationId not found"))
 
-        if (quoteWithItems.quotation.status == QuotationStatus.CONVERTED_TO_SALE) {
+        if (quoteWithItems.quotation.status == QuotationStatus.CONVERTED) {
             return@withTransaction Result.failure(IllegalStateException("Quotation #$quotationId is already converted"))
         }
 
@@ -159,4 +159,3 @@ class QuotationRepository(
         saleResult
     }
 }
-
