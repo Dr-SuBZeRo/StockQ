@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_navy">#0F172A</color>
+    <color name="primary_navy_dark">#020617</color>
+    <color name="secondary_teal">#0D9488</color>
+    <color name="secondary_teal_dark">#115E59</color>
+    <color name="surface_light">#F8FAFC</color>
+    <color name="surface_dark">#0B0F19</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StockQ</string>
+    <string name="developer_name">SuBZeRo</string>
+    <string name="default_currency">INR</string>
+    <string name="currency_symbol">₹</string>
+
+    <!-- Navigation / Screen Titles -->
+    <string name="title_welcome">Welcome to StockQ</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_inventory">Product Inventory</string>
+    <string name="title_add_product">Add Product</string>
+    <string name="title_edit_product">Edit Product</string>
+    <string name="title_product_details">Product Details</string>
+    <string name="title_stock_movement">Stock Movement</string>
+    <string name="title_purchases">Purchase Entry</string>
+    <string name="title_suppliers">Suppliers</string>
+    <string name="title_supplier_comparison">Supplier Comparison</string>
+    <string name="title_reorder">Reorder List</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_backup_restore">Backup &amp; Restore</string>
+
+    <!-- Actions -->
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_add">Add</string>
+    <string name="action_export">Export Backup</string>
+    <string name="action_import">Restore Backup</string>
+    <string name="action_search">Search products...</string>
+
+    <!-- Empty States & Descriptions -->
+    <string name="empty_inventory">No products in inventory yet. Tap + to add your first product.</string>
+    <string name="empty_stock_movements">No recent stock movements recorded.</string>
+    <string name="empty_purchases">No purchases recorded yet.</string>
+    <string name="empty_suppliers">No suppliers registered yet.</string>
+    <string name="empty_reorder">All products are adequately stocked.</string>
+    <string name="privacy_tagline">Offline-First • Zero Cloud Tracking • 100% Private</string>
+</resources>

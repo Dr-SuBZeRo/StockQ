@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Disallow automatic cloud sync for user privacy -->
+        <exclude domain="database" path="stockq.db" />
+        <exclude domain="sharedpref" path="stockq_preferences.preferences_pb" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="database" path="stockq.db" />
+        <include domain="sharedpref" path="stockq_preferences.preferences_pb" />
+    </device-transfer>
+</data-extraction-rules>

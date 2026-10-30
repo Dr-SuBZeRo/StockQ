@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Explicitly exclude sensitive retail database from unencrypted automatic cloud backup -->
+    <exclude domain="database" path="stockq.db" />
+</full-backup-content>

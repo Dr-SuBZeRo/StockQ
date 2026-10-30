@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ஸ்டாக்-க்யூ (StockQ)</string>
+    <string name="developer_name">SuBZeRo</string>
+    <string name="default_currency">INR</string>
+    <string name="currency_symbol">₹</string>
+
+    <!-- Navigation / Screen Titles in Tamil -->
+    <string name="title_welcome">StockQ-விற்கு நல்வரவு</string>
+    <string name="title_dashboard">முகப்பு பலகை</string>
+    <string name="title_inventory">பொருட்கள் பட்டியல்</string>
+    <string name="title_add_product">புதிய பொருள் சேர்த்தல்</string>
+    <string name="title_edit_product">பொருள் விவரம் திருத்துதல்</string>
+    <string name="title_product_details">பொருள் முழு விவரம்</string>
+    <string name="title_stock_movement">இருப்பு வரவு/செலவு</string>
+    <string name="title_purchases">கொள்முதல் பதிவு</string>
+    <string name="title_suppliers">விற்பனையாளர்கள்</string>
+    <string name="title_supplier_comparison">விற்பனையாளர் ஒப்பீடு</string>
+    <string name="title_reorder">மறுஆர்டர் பட்டியல்</string>
+    <string name="title_settings">அமைப்புகள்</string>
+    <string name="title_backup_restore">காப்பு &amp; மீட்டெடுப்பு</string>
+
+    <!-- Actions -->
+    <string name="action_save">சேமி</string>
+    <string name="action_cancel">ரத்து செய்</string>
+    <string name="action_delete">நீக்கு</string>
+    <string name="action_edit">திருத்து</string>
+    <string name="action_add">சேர்</string>
+    <string name="action_export">காப்புப்பதிவு ஏற்று</string>
+    <string name="action_import">காப்புப்பதிவு இறக்கு</string>
+    <string name="action_search">பொருட்களைத் தேடுக...</string>
+
+    <!-- Empty States & Descriptions -->
+    <string name="empty_inventory">பொருட்கள் எதுவும் இன்னும் சேர்க்கப்படவில்லை. + ஐ அழுத்தவும்.</string>
+    <string name="empty_stock_movements">சமீபத்திய இருப்பு பரிவர்த்தனைகள் எதுவும் இல்லை.</string>
+    <string name="empty_purchases">கொள்முதல் பதிவுகள் எதுவும் இல்லை.</string>
+    <string name="empty_suppliers">விற்பனையாளர்கள் விவரங்கள் எதுவும் இல்லை.</string>
+    <string name="empty_reorder">அனைத்து பொருட்களும் போதுமான அளவில் இருப்பில் உள்ளன.</string>
+    <string name="privacy_tagline">ஆஃப்லைன் முதல் • மேகக்கணி கண்காணிப்பு இல்லை • முழு தனிஉரிமை</string>
+</resources>
