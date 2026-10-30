@@ -1,4 +1,4 @@
-# StockQ — Phase 1 Project Code Review & Architecture Strategy
+﻿# StockQ — Phase 1 Project Code Review & Architecture Strategy
 
 **Product**: StockQ  
 **Application ID**: `com.stockq` (configured via `build.gradle.kts`)  
@@ -15,7 +15,7 @@
 - **Kotlin & Compose**: Kotlin 2.3.20 with integrated Jetpack Compose Compiler plugin and Compose BOM 2026.03.01.
 - **Symbol Processing & ORM**: KSP 2.3.12 with Room 2.8.5.
 - **Memory Tuning**: Tuned to `-Xmx1024m` with Serial GC (`-XX:+UseSerialGC`) to guarantee stability on the Windows 11 host with 2.28 GB free RAM.
-- **Application ID Note**: The user directive specifies `Application ID: com.stockq`. We will update `defaultConfig.applicationId = "com.stockq"` in `app/build.gradle.kts` while preserving `namespace = "com.subzero.stockq"` for seamless Kotlin package alignment.
+- **Application ID Note**: The user directive specifies `Application ID: com.stockq`. We will update `defaultConfig.applicationId = "com.stockq"` in `app/build.gradle.kts` while preserving `namespace = "com.stockq"` for seamless Kotlin package alignment.
 
 ### 1.2 Scaffold Review & Identified Gaps
 1. **Database Layer (Empty)**:

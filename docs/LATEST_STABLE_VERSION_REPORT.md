@@ -1,8 +1,8 @@
-# StockQ — Latest Stable Technology & Version Research Report
+﻿# StockQ — Latest Stable Technology & Version Research Report
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Date**: October 30, 2026  
 **Auditor**: Senior Android Architect & DevOps Specialist  

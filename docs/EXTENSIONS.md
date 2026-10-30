@@ -1,8 +1,8 @@
-# StockQ — Antigravity IDE Extension Inventory
+﻿# StockQ — Antigravity IDE Extension Inventory
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Date**: October 30, 2026  
 

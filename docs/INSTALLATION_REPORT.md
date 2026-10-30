@@ -1,8 +1,8 @@
-# StockQ — Toolchain & Development Environment Installation Report
+﻿# StockQ — Toolchain & Development Environment Installation Report
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Date**: October 30, 2026  
 

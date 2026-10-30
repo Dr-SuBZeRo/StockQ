@@ -1,8 +1,8 @@
-# StockQ — Dependency Inventory & License Review
+﻿# StockQ — Dependency Inventory & License Review
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Date**: October 30, 2026  
 

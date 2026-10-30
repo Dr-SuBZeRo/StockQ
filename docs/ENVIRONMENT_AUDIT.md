@@ -1,8 +1,8 @@
-# StockQ — Environment Audit Report
+﻿# StockQ — Environment Audit Report
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Audit Date**: October 30, 2026  
 **Auditor**: Antigravity Assistant & Senior Android Systems Engineer  

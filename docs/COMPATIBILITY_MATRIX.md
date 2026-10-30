@@ -1,8 +1,8 @@
-# StockQ — Toolchain & Dependency Compatibility Matrix
+﻿# StockQ — Toolchain & Dependency Compatibility Matrix
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Date**: October 30, 2026  
 

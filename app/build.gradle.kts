@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.subzero.stockq"
+    namespace = "com.stockq"
     compileSdk = 36
 
     defaultConfig {
@@ -27,7 +27,6 @@ android {
             )
         }
         debug {
-            applicationIdSuffix = ".debug"
             isDebuggable = true
         }
     }
@@ -38,6 +37,11 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+tasks.withType<Test>().configureEach {
+    maxParallelForks = 1
+    jvmArgs("-Xms64m", "-Xmx256m", "-XX:+UseSerialGC")
 }
 
 dependencies {

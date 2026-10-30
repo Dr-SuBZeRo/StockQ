@@ -1,4 +1,4 @@
-# StockQ — Phase 1 Master Implementation Report
+﻿# StockQ — Phase 1 Master Implementation Report
 **Platform**: Native Android — Kotlin, Jetpack Compose, Material Design 3  
 **Application ID**: `com.stockq`  
 **Developer**: SuBZeRo  
@@ -144,5 +144,6 @@ All user interface screens are built with Jetpack Compose and Material 3 design 
 - **Manifest Location**: `app/build/intermediates/merged_manifest/debug/processDebugMainManifest/AndroidManifest.xml`
 - **Network Permissions**: **ZERO `android.permission.INTERNET`** declarations present.
 - **Package / Application ID**: `com.stockq` (`com.stockq.debug`)
-- **Application Class**: `com.subzero.stockq.StockQApp`
+- **Application Class**: `com.stockq.StockQApp`
 - **Launcher Icons**: `@mipmap/ic_launcher`, `@mipmap/ic_launcher_round`
+

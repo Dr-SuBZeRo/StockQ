@@ -1,8 +1,8 @@
-# StockQ — Privacy Review
+﻿# StockQ — Privacy Review
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Date**: October 30, 2026  
 
@@ -26,8 +26,8 @@ StockQ operates in total network isolation. Even if a rogue library were somehow
 ## 2. On-Device Storage Layout
 
 All persistent application data resides in internal private app storage:
-- `/data/data/com.subzero.stockq/databases/stockq.db`: Main Room SQLite database.
-- `/data/data/com.subzero.stockq/shared_prefs/stockq_preferences.preferences_pb`: DataStore preferences (e.g. currency symbol, store profile, language selection).
+- `/data/data/com.stockq/databases/stockq.db`: Main Room SQLite database.
+- `/data/data/com.stockq/shared_prefs/stockq_preferences.preferences_pb`: DataStore preferences (e.g. currency symbol, store profile, language selection).
 
 ---
 

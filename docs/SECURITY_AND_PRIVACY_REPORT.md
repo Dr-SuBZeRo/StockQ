@@ -1,8 +1,8 @@
-# StockQ — Security & Privacy Configuration Report
+﻿# StockQ — Security & Privacy Configuration Report
 
 **Product**: StockQ  
 **Developer**: SuBZeRo  
-**Application ID**: `com.subzero.stockq`  
+**Application ID**: `com.stockq`  
 **Workspace**: `G:\StockQ`  
 **Date**: October 30, 2026  
 
@@ -18,7 +18,7 @@ StockQ is built from the ground up as an **offline-first, zero-surveillance busi
 | **No Telemetry or Tracking** | Zero third-party analytics libraries (Firebase, Mixpanel, etc.). | Dependency tree audit |
 | **No Advertising** | Zero ad networks or tracking identifiers. | Dependency tree audit |
 | **No Account Creation** | No sign-in, email, phone number, or OTP required. | App architecture |
-| **Strict Local Storage** | All records are stored exclusively in an internal SQLite database (`/data/data/com.subzero.stockq/databases/stockq.db`). | Room Database configuration |
+| **Strict Local Storage** | All records are stored exclusively in an internal SQLite database (`/data/data/com.stockq/databases/stockq.db`). | Room Database configuration |
 | **User-Controlled Backup** | Backup and restore operate via Android's Storage Access Framework (`ACTION_CREATE_DOCUMENT` / `ACTION_OPEN_DOCUMENT`). The user chooses exactly where to save or load their file. | SAF integration |
 | **Disabling Automatic Cloud Backup** | `android:allowBackup="false"` in `AndroidManifest.xml` prevents the Android operating system from automatically uploading private business data to Google Drive. | AndroidManifest & Backup Rules |
 
