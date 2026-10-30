@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -35,6 +36,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.stockq.R
 import com.stockq.core.ui.components.StockQTopBar
@@ -49,6 +53,10 @@ fun SettingsScreen(
     val formState by viewModel.formState.collectAsStateWithLifecycle()
     val isDark = isSystemInDarkTheme()
     val logoRes = if (isDark) R.drawable.stockq_logo_dark else R.drawable.stockq_logo_light
+    val context = LocalContext.current
+    val installedVersion = runCatching {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "Unknown"
+    }.getOrDefault("Unknown")
 
     Scaffold(
         topBar = {
@@ -220,12 +228,21 @@ fun SettingsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        Text("• Developer: SuBZeRo", style = MaterialTheme.typography.bodySmall)
-                        Text("• Version: 1.0.0 (Phase 1)", style = MaterialTheme.typography.bodySmall)
-                        Text("• Architecture: 100% Offline-First Native Android", style = MaterialTheme.typography.bodySmall)
-                        Text("• Privacy Guarantee: Zero internet permission, zero ads, zero analytics", style = MaterialTheme.typography.bodySmall)
-                        Text("• Financial Precision: Integer Minor Currency Units (Paise)", style = MaterialTheme.typography.bodySmall)
-                        Text("• Ledger: Immutable audit trail for all stock movements", style = MaterialTheme.typography.bodySmall)
+                        Text("Creator: SuBZeRo", style = MaterialTheme.typography.bodySmall)
+                        Text("App name: StockQ", style = MaterialTheme.typography.bodySmall)
+                        Text("Installed version: $installedVersion", style = MaterialTheme.typography.bodySmall)
+                        Text("Application ID: ${context.packageName}", style = MaterialTheme.typography.bodySmall)
+                        Text("Gradle namespace: com.stockq", style = MaterialTheme.typography.bodySmall)
+                        Text("Repository: github.com/Dr-SuBZeRo/StockQ", style = MaterialTheme.typography.bodySmall)
+                        Text("Your business data is stored locally on this device. StockQ has no account, ads, analytics, or cloud sync.", style = MaterialTheme.typography.bodySmall)
+                        Text("Updates are manual. Open the release page and download/install an update yourself.", style = MaterialTheme.typography.bodySmall)
+                        OutlinedButton(
+                            onClick = {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Dr-SuBZeRo/StockQ/releases"))
+                                runCatching { context.startActivity(intent) }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) { Text("Check for Updates") }
                     }
                 }
             }
