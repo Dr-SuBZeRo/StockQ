@@ -13,10 +13,19 @@
     <string name="title_edit_product">Edit Product</string>
     <string name="title_product_details">Product Details</string>
     <string name="title_stock_movement">Stock Movement</string>
-    <string name="title_purchases">Purchase Entry</string>
+    <string name="title_purchases">Purchase Management</string>
     <string name="title_suppliers">Suppliers</string>
     <string name="title_supplier_comparison">Supplier Comparison</string>
     <string name="title_reorder">Reorder List</string>
+    <string name="title_sales">Sales &amp; POS</string>
+    <string name="title_customers">Customers &amp; Dues</string>
+    <string name="title_quotations">Quotations</string>
+    <string name="title_service_jobs">Service &amp; Repairs</string>
+    <string name="title_expenses">Daily Expenses</string>
+    <string name="title_batches">Batch &amp; Expiry Tracker</string>
+    <string name="title_employees">Staff &amp; Attendance</string>
+    <string name="title_reports">Profit &amp; Reports</string>
+    <string name="title_documents">Compliance &amp; Licenses</string>
     <string name="title_settings">Settings</string>
     <string name="title_backup_restore">Backup &amp; Restore</string>
 
@@ -26,9 +35,15 @@
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
     <string name="action_add">Add</string>
+    <string name="action_confirm">Confirm</string>
     <string name="action_export">Export Backup</string>
     <string name="action_import">Restore Backup</string>
     <string name="action_search">Search products...</string>
+    <string name="action_complete_sale">Complete Sale</string>
+    <string name="action_record_payment">Record Payment</string>
+    <string name="action_remind_whatsapp">Remind on WhatsApp</string>
+    <string name="action_convert_to_sale">Convert to Sale</string>
+    <string name="action_check_updates">Check for Updates</string>
 
     <!-- Empty States & Descriptions -->
     <string name="empty_inventory">No products in inventory yet. Tap + to add your first product.</string>
@@ -36,5 +51,14 @@
     <string name="empty_purchases">No purchases recorded yet.</string>
     <string name="empty_suppliers">No suppliers registered yet.</string>
     <string name="empty_reorder">All products are adequately stocked.</string>
+    <string name="empty_sales">No sales recorded yet. Use POS to bill customers.</string>
+    <string name="empty_customers">No customers recorded yet.</string>
+    <string name="empty_customer_dues">No outstanding customer dues!</string>
+    <string name="empty_quotations">No quotations created yet.</string>
+    <string name="empty_service_jobs">No service or repair jobs active.</string>
+    <string name="empty_expenses">No expenses recorded for this period.</string>
+    <string name="empty_batches">No expiring batches detected.</string>
+    <string name="empty_employees">No employees added yet.</string>
+    <string name="empty_documents">No compliance documents uploaded.</string>
     <string name="privacy_tagline">Offline-First • Zero Cloud Tracking • 100% Private</string>
 </resources>

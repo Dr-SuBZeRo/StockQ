@@ -1,10 +1,11 @@
-﻿package com.stockq.core.database.dao
+package com.stockq.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.stockq.core.database.entity.StockMovement
+import com.stockq.core.model.Quantity
 import kotlinx.coroutines.flow.Flow
 
 data class StockMovementWithProduct(
@@ -13,14 +14,17 @@ data class StockMovementWithProduct(
     val productName: String,
     val productUnit: String,
     val movementType: String,
-    val quantityChange: Double,
-    val balanceAfter: Double,
+    val quantityChangeMilli: Long,
+    val balanceAfterMilli: Long,
     val referenceType: String?,
     val referenceId: Long?,
     val unitCostPaise: Long,
     val reasonOrNotes: String,
     val timestamp: Long
-)
+) {
+    val quantityChange: Double get() = Quantity.toDouble(quantityChangeMilli)
+    val balanceAfter: Double get() = Quantity.toDouble(balanceAfterMilli)
+}
 
 @Dao
 interface StockMovementDao {
@@ -37,8 +41,8 @@ interface StockMovementDao {
             p.name AS productName,
             p.unit AS productUnit,
             sm.movementType AS movementType,
-            sm.quantityChange AS quantityChange,
-            sm.balanceAfter AS balanceAfter,
+            sm.quantityChangeMilli AS quantityChangeMilli,
+            sm.balanceAfterMilli AS balanceAfterMilli,
             sm.referenceType AS referenceType,
             sm.referenceId AS referenceId,
             sm.unitCostPaise AS unitCostPaise,
@@ -54,8 +58,11 @@ interface StockMovementDao {
     @Query("SELECT * FROM stock_movements WHERE productId = :productId ORDER BY timestamp DESC, id DESC LIMIT 1")
     suspend fun getLatestMovementForProduct(productId: Long): StockMovement?
 
-    @Query("SELECT COALESCE(SUM(quantityChange), 0.0) FROM stock_movements WHERE productId = :productId")
-    suspend fun calculateNetStockFromLedger(productId: Long): Double
+    @Query("SELECT COALESCE(SUM(quantityChangeMilli), 0) FROM stock_movements WHERE productId = :productId")
+    suspend fun calculateNetStockFromLedgerMilli(productId: Long): Long
+
+    suspend fun calculateNetStockFromLedger(productId: Long): Double =
+        Quantity.toDouble(calculateNetStockFromLedgerMilli(productId))
 
     @Query("SELECT COUNT(*) FROM stock_movements WHERE referenceType = :refType AND referenceId = :refId")
     suspend fun countMovementsForReference(refType: String, refId: Long): Int
@@ -66,4 +73,3 @@ interface StockMovementDao {
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertMovements(movements: List<StockMovement>)
 }
-

@@ -1,40 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ஸ்டாக்-க்யூ (StockQ)</string>
+    <string name="app_name">StockQ</string>
     <string name="developer_name">SuBZeRo</string>
     <string name="default_currency">INR</string>
     <string name="currency_symbol">₹</string>
 
-    <!-- Navigation / Screen Titles in Tamil -->
+    <!-- வழிசெலுத்தல் / திரைத் தலைப்புகள் -->
     <string name="title_welcome">StockQ-விற்கு நல்வரவு</string>
-    <string name="title_dashboard">முகப்பு பலகை</string>
-    <string name="title_inventory">பொருட்கள் பட்டியல்</string>
-    <string name="title_add_product">புதிய பொருள் சேர்த்தல்</string>
-    <string name="title_edit_product">பொருள் விவரம் திருத்துதல்</string>
-    <string name="title_product_details">பொருள் முழு விவரம்</string>
-    <string name="title_stock_movement">இருப்பு வரவு/செலவு</string>
-    <string name="title_purchases">கொள்முதல் பதிவு</string>
+    <string name="title_dashboard">முகப்புப் பலகை</string>
+    <string name="title_inventory">பொருட்கள் இருப்பு</string>
+    <string name="title_add_product">புதிய பொருள் சேர்</string>
+    <string name="title_edit_product">பொருளை மாற்று</string>
+    <string name="title_product_details">பொருள் விவரங்கள்</string>
+    <string name="title_stock_movement">இருப்பு மாற்றங்கள்</string>
+    <string name="title_purchases">கொள்முதல் மேலாண்மை</string>
     <string name="title_suppliers">விற்பனையாளர்கள்</string>
     <string name="title_supplier_comparison">விற்பனையாளர் ஒப்பீடு</string>
     <string name="title_reorder">மறுஆர்டர் பட்டியல்</string>
+    <string name="title_sales">விற்பனை &amp; பில்லிங்</string>
+    <string name="title_customers">வாடிக்கையாளர்கள் &amp; பாக்கி</string>
+    <string name="title_quotations">விலைப் புள்ளி</string>
+    <string name="title_service_jobs">பழுது &amp; சேவைப் பணிகள்</string>
+    <string name="title_expenses">தினசரி செலவுகள்</string>
+    <string name="title_batches">தொகுதி &amp; காலாவதி கண்காணிப்பு</string>
+    <string name="title_employees">பணியாளர்கள் &amp; வருகை</string>
+    <string name="title_reports">லாபம் &amp; அறிக்கைகள்</string>
+    <string name="title_documents">சான்றிதழ்கள் &amp; உரிமங்கள்</string>
     <string name="title_settings">அமைப்புகள்</string>
     <string name="title_backup_restore">காப்பு &amp; மீட்டெடுப்பு</string>
 
-    <!-- Actions -->
+    <!-- செயல்பாடுகள் -->
     <string name="action_save">சேமி</string>
     <string name="action_cancel">ரத்து செய்</string>
     <string name="action_delete">நீக்கு</string>
-    <string name="action_edit">திருத்து</string>
+    <string name="action_edit">தொகு</string>
     <string name="action_add">சேர்</string>
-    <string name="action_export">காப்புப்பதிவு ஏற்று</string>
-    <string name="action_import">காப்புப்பதிவு இறக்கு</string>
+    <string name="action_confirm">உறுதிசெய்</string>
+    <string name="action_export">காப்பு நகலெடு</string>
+    <string name="action_import">காப்பு மீட்டெடு</string>
     <string name="action_search">பொருட்களைத் தேடுக...</string>
+    <string name="action_complete_sale">விற்பனை முடி</string>
+    <string name="action_record_payment">பணம் பதிவுசெய்</string>
+    <string name="action_remind_whatsapp">வாட்ஸ்அப் நினைவூட்டல்</string>
+    <string name="action_convert_to_sale">விற்பனையாக மாற்று</string>
+    <string name="action_check_updates">புதிய பதிப்பை சரிபார்க்கவும்</string>
 
-    <!-- Empty States & Descriptions -->
-    <string name="empty_inventory">பொருட்கள் எதுவும் இன்னும் சேர்க்கப்படவில்லை. + ஐ அழுத்தவும்.</string>
-    <string name="empty_stock_movements">சமீபத்திய இருப்பு பரிவர்த்தனைகள் எதுவும் இல்லை.</string>
+    <!-- காலி நிலைகள் -->
+    <string name="empty_inventory">சரக்குகள் எதுவும் இல்லை. புதிய பொருளைச் சேர்க்க + என்பதைத் தட்டவும்.</string>
+    <string name="empty_stock_movements">சமீபத்திய இருப்பு மாற்றங்கள் எதுவும் இல்லை.</string>
     <string name="empty_purchases">கொள்முதல் பதிவுகள் எதுவும் இல்லை.</string>
-    <string name="empty_suppliers">விற்பனையாளர்கள் விவரங்கள் எதுவும் இல்லை.</string>
-    <string name="empty_reorder">அனைத்து பொருட்களும் போதுமான அளவில் இருப்பில் உள்ளன.</string>
-    <string name="privacy_tagline">ஆஃப்லைன் முதல் • மேகக்கணி கண்காணிப்பு இல்லை • முழு தனிஉரிமை</string>
+    <string name="empty_suppliers">விற்பனையாளர்கள் எதுவும் பதிவு செய்யப்படவில்லை.</string>
+    <string name="empty_reorder">அனைத்து பொருட்களும் போதிய அளவில் இருப்பில் உள்ளன.</string>
+    <string name="empty_sales">விற்பனைகள் எதுவும் இல்லை. புதிய விற்பனையைத் தொடங்கவும்.</string>
+    <string name="empty_customers">வாடிக்கையாளர்கள் எதுவும் இல்லை.</string>
+    <string name="empty_customer_dues">வாடிக்கையாளர் பாக்கிகள் எதுவும் இல்லை!</string>
+    <string name="empty_quotations">விலைப் புள்ளிகள் எதுவும் இல்லை.</string>
+    <string name="empty_service_jobs">நடப்பில் சேவை பணிகள் எதுவும் இல்லை.</string>
+    <string name="empty_expenses">செலவுப் பதிவுகள் எதுவும் இல்லை.</string>
+    <string name="empty_batches">காலாவதியாகும் தொகுதிகள் எதுவும் இல்லை.</string>
+    <string name="empty_employees">பணியாளர்கள் எதுவும் இல்லை.</string>
+    <string name="empty_documents">வணிக ஆவணங்கள் எதுவும் இல்லை.</string>
+    <string name="privacy_tagline">ஆஃப்லைன் முதல் • கிளவுட் கண்காணிப்பு இல்லை • 100% தனிப்பட்டது</string>
 </resources>

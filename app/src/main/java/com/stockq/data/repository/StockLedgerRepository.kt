@@ -1,10 +1,11 @@
-﻿package com.stockq.data.repository
+package com.stockq.data.repository
 
 import androidx.room.withTransaction
 import com.stockq.core.database.StockQDatabase
 import com.stockq.core.database.dao.StockMovementWithProduct
 import com.stockq.core.database.entity.StockMovement
 import com.stockq.core.database.entity.StockMovementType
+import com.stockq.core.model.Quantity
 import kotlinx.coroutines.flow.Flow
 
 data class StockReconciliation(
@@ -43,7 +44,8 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         costPricePaise: Long,
         notes: String = "Initial opening stock"
     ): Result<StockMovement> = database.withTransaction {
-        if (initialStock < 0.0) {
+        val initialStockMilli = Quantity.fromDouble(initialStock)
+        if (initialStockMilli < 0L) {
             return@withTransaction Result.failure(IllegalArgumentException("Opening stock cannot be negative"))
         }
 
@@ -53,8 +55,8 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         val movement = StockMovement(
             productId = productId,
             movementType = StockMovementType.OPENING_STOCK,
-            quantityChange = initialStock,
-            balanceAfter = initialStock,
+            quantityChangeMilli = initialStockMilli,
+            balanceAfterMilli = initialStockMilli,
             referenceType = "INITIAL",
             unitCostPaise = costPricePaise,
             reasonOrNotes = notes,
@@ -62,7 +64,7 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         )
 
         val id = movementDao.insertMovement(movement)
-        productDao.updateStock(productId, initialStock)
+        productDao.updateStock(productId, initialStockMilli)
         Result.success(movement.copy(id = id))
     }
 
@@ -74,28 +76,31 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         productId: Long,
         quantity: Double,
         referenceId: Long? = null,
+        batchId: Long? = null,
         notes: String = ""
     ): Result<StockMovement> = database.withTransaction {
-        if (quantity <= 0.0) {
+        val qtyMilli = Quantity.fromDouble(quantity)
+        if (qtyMilli <= 0L) {
             return@withTransaction Result.failure(IllegalArgumentException("Issue quantity must be greater than zero"))
         }
 
         val product = productDao.getProductDirect(productId)
             ?: return@withTransaction Result.failure(IllegalArgumentException("Product not found: $productId"))
 
-        val currentStock = product.currentStock
-        if (currentStock < quantity) {
+        val currentStockMilli = product.currentStockMilli
+        if (currentStockMilli < qtyMilli) {
             return@withTransaction Result.failure(
-                IllegalStateException("Insufficient stock: Available $currentStock ${product.unit}, requested $quantity ${product.unit}")
+                IllegalStateException("Insufficient stock: Available ${product.currentStock} ${product.unit}, requested $quantity ${product.unit}")
             )
         }
 
-        val newBalance = currentStock - quantity
+        val newBalanceMilli = currentStockMilli - qtyMilli
         val movement = StockMovement(
             productId = productId,
+            batchId = batchId,
             movementType = StockMovementType.SALE_ISSUE,
-            quantityChange = -quantity,
-            balanceAfter = newBalance,
+            quantityChangeMilli = -qtyMilli,
+            balanceAfterMilli = newBalanceMilli,
             referenceType = "SALE",
             referenceId = referenceId,
             unitCostPaise = product.costPricePaise,
@@ -104,7 +109,7 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         )
 
         val id = movementDao.insertMovement(movement)
-        productDao.updateStock(productId, newBalance)
+        productDao.updateStock(productId, newBalanceMilli)
         Result.success(movement.copy(id = id))
     }
 
@@ -117,19 +122,20 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         physicalCount: Double,
         reason: String
     ): Result<StockMovement> = database.withTransaction {
-        if (physicalCount < 0.0) {
+        val physicalCountMilli = Quantity.fromDouble(physicalCount)
+        if (physicalCountMilli < 0L) {
             return@withTransaction Result.failure(IllegalArgumentException("Physical count cannot be negative"))
         }
 
         val product = productDao.getProductDirect(productId)
             ?: return@withTransaction Result.failure(IllegalArgumentException("Product not found: $productId"))
 
-        val delta = physicalCount - product.currentStock
+        val deltaMilli = physicalCountMilli - product.currentStockMilli
         val movement = StockMovement(
             productId = productId,
             movementType = StockMovementType.PHYSICAL_ADJUSTMENT,
-            quantityChange = delta,
-            balanceAfter = physicalCount,
+            quantityChangeMilli = deltaMilli,
+            balanceAfterMilli = physicalCountMilli,
             referenceType = "AUDIT",
             unitCostPaise = product.costPricePaise,
             reasonOrNotes = reason.ifBlank { "Physical audit adjustment" },
@@ -137,7 +143,7 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         )
 
         val id = movementDao.insertMovement(movement)
-        productDao.updateStock(productId, physicalCount)
+        productDao.updateStock(productId, physicalCountMilli)
         Result.success(movement.copy(id = id))
     }
 
@@ -149,25 +155,26 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         quantity: Double,
         reason: String
     ): Result<StockMovement> = database.withTransaction {
-        if (quantity <= 0.0) {
+        val qtyMilli = Quantity.fromDouble(quantity)
+        if (qtyMilli <= 0L) {
             return@withTransaction Result.failure(IllegalArgumentException("Damaged quantity must be greater than zero"))
         }
 
         val product = productDao.getProductDirect(productId)
             ?: return@withTransaction Result.failure(IllegalArgumentException("Product not found: $productId"))
 
-        if (product.currentStock < quantity) {
+        if (product.currentStockMilli < qtyMilli) {
             return@withTransaction Result.failure(
                 IllegalStateException("Cannot mark more stock damaged than currently in inventory ($quantity > ${product.currentStock})")
             )
         }
 
-        val newBalance = product.currentStock - quantity
+        val newBalanceMilli = product.currentStockMilli - qtyMilli
         val movement = StockMovement(
             productId = productId,
             movementType = StockMovementType.DAMAGED_WASTAGE,
-            quantityChange = -quantity,
-            balanceAfter = newBalance,
+            quantityChangeMilli = -qtyMilli,
+            balanceAfterMilli = newBalanceMilli,
             referenceType = "DAMAGE",
             unitCostPaise = product.costPricePaise,
             reasonOrNotes = reason.ifBlank { "Damaged or expired inventory" },
@@ -175,7 +182,7 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         )
 
         val id = movementDao.insertMovement(movement)
-        productDao.updateStock(productId, newBalance)
+        productDao.updateStock(productId, newBalanceMilli)
         Result.success(movement.copy(id = id))
     }
 
@@ -187,19 +194,20 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         quantity: Double,
         reason: String
     ): Result<StockMovement> = database.withTransaction {
-        if (quantity <= 0.0) {
+        val qtyMilli = Quantity.fromDouble(quantity)
+        if (qtyMilli <= 0L) {
             return@withTransaction Result.failure(IllegalArgumentException("Return quantity must be greater than zero"))
         }
 
         val product = productDao.getProductDirect(productId)
             ?: return@withTransaction Result.failure(IllegalArgumentException("Product not found: $productId"))
 
-        val newBalance = product.currentStock + quantity
+        val newBalanceMilli = product.currentStockMilli + qtyMilli
         val movement = StockMovement(
             productId = productId,
             movementType = StockMovementType.CUSTOMER_RETURN,
-            quantityChange = quantity,
-            balanceAfter = newBalance,
+            quantityChangeMilli = qtyMilli,
+            balanceAfterMilli = newBalanceMilli,
             referenceType = "CUSTOMER_RETURN",
             unitCostPaise = product.costPricePaise,
             reasonOrNotes = reason.ifBlank { "Customer product return" },
@@ -207,7 +215,7 @@ class StockLedgerRepository(private val database: StockQDatabase) {
         )
 
         val id = movementDao.insertMovement(movement)
-        productDao.updateStock(productId, newBalance)
+        productDao.updateStock(productId, newBalanceMilli)
         Result.success(movement.copy(id = id))
     }
 
@@ -217,14 +225,13 @@ class StockLedgerRepository(private val database: StockQDatabase) {
     suspend fun reconcileStock(productId: Long): StockReconciliation = database.withTransaction {
         val product = productDao.getProductDirect(productId)
             ?: return@withTransaction StockReconciliation(productId, 0.0, 0.0, false)
-        val ledgerSum = movementDao.calculateNetStockFromLedger(productId)
-        val isConsistent = Math.abs(product.currentStock - ledgerSum) < 0.0001
+        val ledgerSumMilli = movementDao.calculateNetStockFromLedgerMilli(productId)
+        val isConsistent = product.currentStockMilli == ledgerSumMilli
         StockReconciliation(
             productId = productId,
             cachedStock = product.currentStock,
-            ledgerStock = ledgerSum,
+            ledgerStock = Quantity.toDouble(ledgerSumMilli),
             isConsistent = isConsistent
         )
     }
 }
-

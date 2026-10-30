@@ -1,14 +1,17 @@
-﻿package com.stockq.data.repository
+package com.stockq.data.repository
 
 import com.stockq.core.database.StockQDatabase
 import com.stockq.core.database.dao.SupplierProductQuote
+import com.stockq.core.database.dao.SupplierQuoteComparison
 import com.stockq.core.database.entity.Supplier
+import com.stockq.core.database.entity.SupplierQuotation
 import kotlinx.coroutines.flow.Flow
 
 class SupplierRepository(private val database: StockQDatabase) {
 
     private val supplierDao = database.supplierDao()
     private val itemDao = database.purchaseItemDao()
+    private val quoteDao = database.supplierQuotationDao()
 
     fun getActiveSuppliers(): Flow<List<Supplier>> = supplierDao.getActiveSuppliers()
 
@@ -65,5 +68,10 @@ class SupplierRepository(private val database: StockQDatabase) {
      */
     fun getSupplierQuotesForProduct(productId: Long): Flow<List<SupplierProductQuote>> =
         itemDao.getSupplierQuotesForProduct(productId)
-}
 
+    fun compareFormalQuotesForProduct(productId: Long): Flow<List<SupplierQuoteComparison>> =
+        quoteDao.compareSupplierQuotesForProduct(productId)
+
+    suspend fun addSupplierQuotation(quote: SupplierQuotation): Long =
+        quoteDao.insertQuote(quote)
+}

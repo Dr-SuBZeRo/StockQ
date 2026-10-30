@@ -1,4 +1,4 @@
-﻿package com.stockq.feature.dashboard
+package com.stockq.feature.dashboard
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,16 +9,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.ListAlt
+import androidx.compose.material.icons.filled.Assessment
+import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.Inventory2
+import androidx.compose.material.icons.filled.Money
 import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PointOfSale
+import androidx.compose.material.icons.filled.PriceCheck
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material.icons.filled.VerifiedUser
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -39,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.stockq.R
 import com.stockq.core.model.Money
+import com.stockq.core.model.Quantity
 import com.stockq.core.navigation.StockQDestination
 import com.stockq.core.ui.components.StockQTopBar
 import java.text.SimpleDateFormat
@@ -57,6 +67,13 @@ fun DashboardScreen(
     val supplierCount by viewModel.supplierCount.collectAsStateWithLifecycle()
     val recentMovements by viewModel.recentMovements.collectAsStateWithLifecycle()
     val profile by viewModel.profile.collectAsStateWithLifecycle()
+    val todaySales by viewModel.todaySales.collectAsStateWithLifecycle()
+    val todayGrossProfit by viewModel.todayGrossProfit.collectAsStateWithLifecycle()
+    val todayExpenses by viewModel.todayExpenses.collectAsStateWithLifecycle()
+    val customerDues by viewModel.customerDues.collectAsStateWithLifecycle()
+    val supplierDues by viewModel.supplierDues.collectAsStateWithLifecycle()
+    val expiringBatchesCount by viewModel.expiringBatchesCount.collectAsStateWithLifecycle()
+    val activeJobsCount by viewModel.activeJobsCount.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -83,43 +100,117 @@ fun DashboardScreen(
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Inventory Valuation Card (Real live valuation in paise)
+            // Today's Sales & P&L Hero Card
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNavigate(StockQDestination.REPORTS) }
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
-                    Text(
-                        text = "Total Inventory Valuation",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = Money.formatPaise(valuation),
-                        style = MaterialTheme.typography.headlineLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "$productCount active catalog SKUs",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
-                    )
+                Column(modifier = Modifier.padding(18.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Today's Business Overview",
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "View Reports",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column {
+                            Text("Sales Revenue", style = MaterialTheme.typography.labelSmall)
+                            Text(
+                                text = Money.formatRupees(todaySales),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer
+                            )
+                        }
+                        Column {
+                            Text("Gross Profit", style = MaterialTheme.typography.labelSmall)
+                            Text(
+                                text = Money.formatRupees(todayGrossProfit),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        Column {
+                            Text("Expenses", style = MaterialTheme.typography.labelSmall)
+                            Text(
+                                text = Money.formatRupees(todayExpenses),
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 }
             }
 
-            // Quick Status Chips
+            // Dues & Working Capital Bar
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { onNavigate(StockQDestination.CUSTOMERS) },
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text("Customer Dues", style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            text = Money.formatRupees(customerDues),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = if (customerDues > 0L) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
+                Card(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickable { onNavigate(StockQDestination.PURCHASES) },
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text("Supplier Dues", style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            text = Money.formatRupees(supplierDues),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    }
+                }
+            }
+
+            // Quick Status Pills
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 StatusPill(
-                    label = "Catalog",
-                    value = "$productCount",
+                    label = "Stock Value",
+                    value = Money.formatRupees(valuation),
                     icon = Icons.Default.Inventory2,
                     modifier = Modifier.weight(1f),
                     onClick = { onNavigate(StockQDestination.INVENTORY) }
@@ -133,33 +224,48 @@ fun DashboardScreen(
                     onClick = { onNavigate(StockQDestination.REORDER) }
                 )
                 StatusPill(
-                    label = "Suppliers",
-                    value = "$supplierCount",
-                    icon = Icons.Default.People,
+                    label = "Expiring",
+                    value = "$expiringBatchesCount",
+                    icon = Icons.Default.Warning,
+                    isAlert = expiringBatchesCount > 0,
                     modifier = Modifier.weight(1f),
-                    onClick = { onNavigate(StockQDestination.SUPPLIERS) }
+                    onClick = { onNavigate(StockQDestination.BATCHES) }
                 )
             }
 
-            // Quick Navigation Hub
+            // Operations Grid Header
             Text(
                 text = "Operations Hub",
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
 
+            // Primary Hub Rows
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 DashboardActionCard(
+                    title = "Sales & POS",
+                    subtitle = "Billing & Invoices",
+                    icon = Icons.Default.PointOfSale,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.SALES) }
+                )
+                DashboardActionCard(
                     title = "Inventory",
-                    subtitle = "Catalog & Stock",
+                    subtitle = "$productCount Items",
                     icon = Icons.Default.Inventory2,
                     modifier = Modifier.weight(1f),
                     onClick = { onNavigate(StockQDestination.INVENTORY) }
                 )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 DashboardActionCard(
                     title = "Purchases",
                     subtitle = "Stock Inward",
@@ -167,105 +273,135 @@ fun DashboardScreen(
                     modifier = Modifier.weight(1f),
                     onClick = { onNavigate(StockQDestination.PURCHASES) }
                 )
+                DashboardActionCard(
+                    title = "Customers",
+                    subtitle = "Dues Ledger",
+                    icon = Icons.Default.Person,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.CUSTOMERS) }
+                )
             }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 DashboardActionCard(
-                    title = "Stock Ledger",
-                    subtitle = "Movement History",
+                    title = "Quotations",
+                    subtitle = "Formal Estimates",
+                    icon = Icons.Default.PriceCheck,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.QUOTATIONS) }
+                )
+                DashboardActionCard(
+                    title = "Service & Repairs",
+                    subtitle = "$activeJobsCount Active",
+                    icon = Icons.Default.Build,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.SERVICE_JOBS) }
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                DashboardActionCard(
+                    title = "Daily Expenses",
+                    subtitle = "Operational Costs",
+                    icon = Icons.Default.Money,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.EXPENSES) }
+                )
+                DashboardActionCard(
+                    title = "Profit & Reports",
+                    subtitle = "P&L Summary",
+                    icon = Icons.Default.Assessment,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.REPORTS) }
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                DashboardActionCard(
+                    title = "Staff & Wages",
+                    subtitle = "Attendance Register",
+                    icon = Icons.Default.People,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.EMPLOYEES) }
+                )
+                DashboardActionCard(
+                    title = "Batch & Expiry",
+                    subtitle = "Lot Tracking",
+                    icon = Icons.Default.Warning,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.BATCHES) }
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                DashboardActionCard(
+                    title = "Compliance",
+                    subtitle = "Licenses & Permits",
+                    icon = Icons.Default.VerifiedUser,
+                    modifier = Modifier.weight(1f),
+                    onClick = { onNavigate(StockQDestination.DOCUMENTS) }
+                )
+                DashboardActionCard(
+                    title = "Stock Movements",
+                    subtitle = "Auditable Ledger",
                     icon = Icons.Default.SwapHoriz,
                     modifier = Modifier.weight(1f),
                     onClick = { onNavigate(StockQDestination.STOCK_MOVEMENT) }
                 )
-                DashboardActionCard(
-                    title = "Reorder List",
-                    subtitle = "Restock Alerts",
-                    icon = Icons.AutoMirrored.Filled.ListAlt,
-                    modifier = Modifier.weight(1f),
-                    onClick = { onNavigate(StockQDestination.REORDER) }
-                )
             }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                DashboardActionCard(
-                    title = "Suppliers",
-                    subtitle = "Vendor Directory",
-                    icon = Icons.Default.People,
-                    modifier = Modifier.weight(1f),
-                    onClick = { onNavigate(StockQDestination.SUPPLIERS) }
+            // Recent Movements Section
+            if (recentMovements.isNotEmpty()) {
+                Text(
+                    text = "Recent Stock Movements",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
                 )
-                DashboardActionCard(
-                    title = "Compare",
-                    subtitle = "Supplier Quotes",
-                    icon = Icons.AutoMirrored.Filled.ListAlt,
-                    modifier = Modifier.weight(1f),
-                    onClick = { onNavigate(StockQDestination.SUPPLIER_COMPARISON) }
-                )
-            }
 
-            // Recent Ledger Activity
-            Card(
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Recent Stock Movements",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        IconButton(onClick = { onNavigate(StockQDestination.STOCK_MOVEMENT) }) {
-                            Icon(imageVector = Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "View all")
-                        }
-                    }
-
-                    if (recentMovements.isEmpty()) {
-                        Text(
-                            text = "No stock movements recorded yet.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
-                    } else {
-                        val dateFormat = SimpleDateFormat("dd MMM, hh:mm a", Locale.getDefault())
-                        recentMovements.forEachIndexed { index, m ->
-                            if (index > 0) HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        recentMovements.forEachIndexed { index, movement ->
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(
-                                        text = m.productName,
-                                        style = MaterialTheme.typography.titleSmall,
-                                        fontWeight = FontWeight.Medium
+                                        text = movement.productName,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        fontWeight = FontWeight.SemiBold
                                     )
                                     Text(
-                                        text = "${m.movementType.replace('_', ' ')} • ${dateFormat.format(Date(m.timestamp))}",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                        text = "${movement.movementType} • ${SimpleDateFormat("HH:mm, dd MMM", Locale.US).format(Date(movement.timestamp))}",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
-                                val sign = if (m.quantityChange > 0) "+" else ""
                                 Text(
-                                    text = "$sign${m.quantityChange} ${m.productUnit}",
-                                    style = MaterialTheme.typography.titleSmall,
+                                    text = "${if (movement.quantityChangeMilli >= 0) "+" else ""}${Quantity.toDisplay(movement.quantityChangeMilli)} ${movement.productUnit}",
+                                    style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (m.quantityChange >= 0) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error
+                                    color = if (movement.quantityChangeMilli >= 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
                                 )
+                            }
+                            if (index < recentMovements.lastIndex) {
+                                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
                             }
                         }
                     }
@@ -276,46 +412,42 @@ fun DashboardScreen(
 }
 
 @Composable
-fun StatusPill(
+private fun StatusPill(
     label: String,
     value: String,
     icon: ImageVector,
-    isAlert: Boolean = false,
     modifier: Modifier = Modifier,
+    isAlert: Boolean = false,
     onClick: () -> Unit
 ) {
     Card(
+        modifier = modifier.clickable(onClick = onClick),
         colors = CardDefaults.cardColors(
             containerColor = if (isAlert) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant
-        ),
-        modifier = modifier.clickable { onClick() }
+        )
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            modifier = Modifier.padding(10.dp),
+            horizontalAlignment = Alignment.Start
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = if (isAlert) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
             )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = label, style = MaterialTheme.typography.labelSmall)
             Text(
                 text = value,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = if (isAlert) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                color = if (isAlert) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
 
 @Composable
-fun DashboardActionCard(
+private fun DashboardActionCard(
     title: String,
     subtitle: String,
     icon: ImageVector,
@@ -323,29 +455,33 @@ fun DashboardActionCard(
     onClick: () -> Unit
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier.clickable(onClick = onClick),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = title,
-                tint = MaterialTheme.colorScheme.secondary
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
             )
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Column {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

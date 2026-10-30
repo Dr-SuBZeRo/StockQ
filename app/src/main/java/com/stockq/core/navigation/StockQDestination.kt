@@ -1,4 +1,4 @@
-﻿package com.stockq.core.navigation
+package com.stockq.core.navigation
 
 /**
  * Type-safe navigation destinations for StockQ.
@@ -14,6 +14,15 @@ enum class StockQDestination(val route: String, val label: String) {
     SUPPLIERS("suppliers", "Suppliers"),
     SUPPLIER_COMPARISON("supplier_comparison", "Supplier Comparison"),
     REORDER("reorder", "Reorder List"),
+    SALES("sales", "Sales & POS"),
+    CUSTOMERS("customers", "Customers & Dues"),
+    QUOTATIONS("quotations", "Quotations"),
+    SERVICE_JOBS("service_jobs", "Service & Repairs"),
+    EXPENSES("expenses", "Expenses"),
+    BATCHES("batches", "Batches & Expiry"),
+    EMPLOYEES("employees", "Staff & Wages"),
+    REPORTS("reports", "Profit & Reports"),
+    DOCUMENTS("documents", "Compliance & Licenses"),
     SETTINGS("settings", "Settings"),
     BACKUP_RESTORE("backup_restore", "Backup & Restore");
 

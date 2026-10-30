@@ -1,9 +1,10 @@
-﻿package com.stockq.data.repository
+package com.stockq.data.repository
 
 import androidx.room.withTransaction
 import com.stockq.core.database.StockQDatabase
 import com.stockq.core.database.entity.Product
 import com.stockq.core.database.entity.ProductCategory
+import com.stockq.core.model.Quantity
 import kotlinx.coroutines.flow.Flow
 
 class ProductRepository(
@@ -27,9 +28,13 @@ class ProductRepository(
 
     fun getLowStockProducts(): Flow<List<Product>> = productDao.getLowStockProducts()
 
+    fun getOutOfStockProducts(): Flow<List<Product>> = productDao.getOutOfStockProducts()
+
     fun getActiveProductCount(): Flow<Int> = productDao.getActiveProductCount()
 
     fun getLowStockCount(): Flow<Int> = productDao.getLowStockCount()
+
+    fun getOutOfStockCount(): Flow<Int> = productDao.getOutOfStockCount()
 
     fun getTotalInventoryValuationPaise(): Flow<Long> = productDao.getTotalInventoryValuationPaise()
 
@@ -58,7 +63,11 @@ class ProductRepository(
         initialStock: Double,
         minStockThreshold: Double,
         idealReorderQuantity: Double,
-        categoryId: Long?
+        categoryId: Long?,
+        taxRatePercent: Double = 0.0,
+        isTaxInclusive: Boolean = false,
+        preferredSupplierId: Long? = null,
+        description: String = ""
     ): Result<Long> = database.withTransaction {
         if (name.isBlank()) {
             return@withTransaction Result.failure(IllegalArgumentException("Product name cannot be blank"))
@@ -67,17 +76,37 @@ class ProductRepository(
             return@withTransaction Result.failure(IllegalArgumentException("Prices cannot be negative"))
         }
 
+        val trimmedSku = sku.trim()
+        if (trimmedSku.isNotEmpty()) {
+            val duplicateSku = productDao.findByDuplicateSku(trimmedSku)
+            if (duplicateSku != null) {
+                return@withTransaction Result.failure(IllegalArgumentException("SKU '$trimmedSku' is already assigned to '${duplicateSku.name}'"))
+            }
+        }
+
+        val trimmedBarcode = barcode.trim()
+        if (trimmedBarcode.isNotEmpty()) {
+            val duplicateBarcode = productDao.findByDuplicateBarcode(trimmedBarcode)
+            if (duplicateBarcode != null) {
+                return@withTransaction Result.failure(IllegalArgumentException("Barcode '$trimmedBarcode' is already assigned to '${duplicateBarcode.name}'"))
+            }
+        }
+
         val product = Product(
             categoryId = categoryId,
             name = name.trim(),
-            sku = sku.trim(),
-            barcode = barcode.trim(),
+            description = description.trim(),
+            sku = trimmedSku,
+            barcode = trimmedBarcode,
             unit = unit.trim().ifBlank { "pcs" },
             costPricePaise = costPricePaise,
             sellingPricePaise = sellingPricePaise,
-            currentStock = 0.0, // Initialized to 0, updated by ledger below
-            minStockThreshold = minStockThreshold,
-            idealReorderQuantity = idealReorderQuantity
+            taxRatePercent = taxRatePercent,
+            isTaxInclusive = isTaxInclusive,
+            currentStockMilli = 0L, // Initialized to 0, updated by ledger below
+            minStockThresholdMilli = Quantity.fromDouble(minStockThreshold),
+            idealReorderQuantityMilli = Quantity.fromDouble(idealReorderQuantity),
+            preferredSupplierId = preferredSupplierId
         )
 
         val productId = productDao.insertProduct(product)
@@ -97,6 +126,18 @@ class ProductRepository(
         if (product.name.isBlank()) {
             return Result.failure(IllegalArgumentException("Product name cannot be blank"))
         }
+        if (product.sku.isNotBlank()) {
+            val dup = productDao.findByDuplicateSku(product.sku.trim(), product.id)
+            if (dup != null) {
+                return Result.failure(IllegalArgumentException("SKU '${product.sku}' is already in use by '${dup.name}'"))
+            }
+        }
+        if (product.barcode.isNotBlank()) {
+            val dup = productDao.findByDuplicateBarcode(product.barcode.trim(), product.id)
+            if (dup != null) {
+                return Result.failure(IllegalArgumentException("Barcode '${product.barcode}' is already in use by '${dup.name}'"))
+            }
+        }
         productDao.updateProduct(product.copy(updatedAt = System.currentTimeMillis()))
         return Result.success(Unit)
     }
@@ -105,4 +146,3 @@ class ProductRepository(
         productDao.setArchived(productId, isArchived)
     }
 }
-

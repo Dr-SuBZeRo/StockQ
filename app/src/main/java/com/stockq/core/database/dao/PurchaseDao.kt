@@ -1,4 +1,4 @@
-﻿package com.stockq.core.database.dao
+package com.stockq.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.stockq.core.database.entity.PaymentStatus
 import com.stockq.core.database.entity.Purchase
 import com.stockq.core.database.entity.PurchaseStatus
 import kotlinx.coroutines.flow.Flow
@@ -44,11 +45,20 @@ interface PurchaseDao {
     @Query("SELECT COUNT(*) FROM purchases WHERE status = 'CONFIRMED'")
     fun getConfirmedPurchaseCount(): Flow<Int>
 
+    @Query("SELECT COALESCE(SUM(totalAmountPaise), 0) FROM purchases WHERE status = 'CONFIRMED' AND purchaseDate >= :startOfDay AND purchaseDate <= :endOfDay")
+    fun getTodayPurchaseTotalPaise(startOfDay: Long, endOfDay: Long): Flow<Long>
+
+    @Query("SELECT COALESCE(SUM(totalAmountPaise - paidAmountPaise), 0) FROM purchases WHERE status = 'CONFIRMED' AND totalAmountPaise > paidAmountPaise")
+    fun getPendingSupplierDuesPaise(): Flow<Long>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPurchase(purchase: Purchase): Long
 
     @Update
     suspend fun updatePurchase(purchase: Purchase)
+
+    @Query("UPDATE purchases SET paidAmountPaise = :paidPaise, paymentStatus = :paymentStatus, updatedAt = :timestamp WHERE id = :purchaseId")
+    suspend fun updatePayment(purchaseId: Long, paidPaise: Long, paymentStatus: PaymentStatus, timestamp: Long = System.currentTimeMillis())
 
     @Query("UPDATE purchases SET status = :status, confirmedAt = :confirmedAt, updatedAt = :timestamp WHERE id = :purchaseId")
     suspend fun updateStatus(

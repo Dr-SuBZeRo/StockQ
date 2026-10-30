@@ -1,4 +1,4 @@
-﻿package com.stockq.core.navigation
+package com.stockq.core.navigation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -13,8 +13,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.stockq.StockQApp
 import com.stockq.core.ui.ViewModelFactory
 import com.stockq.feature.backup.BackupRestoreScreen
+import com.stockq.feature.backup.BackupRestoreViewModel
+import com.stockq.feature.batches.BatchesScreen
+import com.stockq.feature.batches.BatchesViewModel
+import com.stockq.feature.customers.CustomersScreen
+import com.stockq.feature.customers.CustomersViewModel
 import com.stockq.feature.dashboard.DashboardScreen
 import com.stockq.feature.dashboard.DashboardViewModel
+import com.stockq.feature.documents.DocumentsScreen
+import com.stockq.feature.documents.DocumentsViewModel
+import com.stockq.feature.employees.EmployeesScreen
+import com.stockq.feature.employees.EmployeesViewModel
+import com.stockq.feature.expenses.ExpensesScreen
+import com.stockq.feature.expenses.ExpensesViewModel
 import com.stockq.feature.inventory.InventoryScreen
 import com.stockq.feature.inventory.InventoryViewModel
 import com.stockq.feature.productdetail.ProductDetailsScreen
@@ -23,8 +34,16 @@ import com.stockq.feature.productedit.AddEditProductScreen
 import com.stockq.feature.productedit.AddEditProductViewModel
 import com.stockq.feature.purchases.PurchasesScreen
 import com.stockq.feature.purchases.PurchasesViewModel
+import com.stockq.feature.quotations.QuotationsScreen
+import com.stockq.feature.quotations.QuotationsViewModel
 import com.stockq.feature.reorder.ReorderScreen
 import com.stockq.feature.reorder.ReorderViewModel
+import com.stockq.feature.reports.ReportsScreen
+import com.stockq.feature.reports.ReportsViewModel
+import com.stockq.feature.sales.SalesScreen
+import com.stockq.feature.sales.SalesViewModel
+import com.stockq.feature.servicejobs.ServiceJobsScreen
+import com.stockq.feature.servicejobs.ServiceJobsViewModel
 import com.stockq.feature.settings.SettingsScreen
 import com.stockq.feature.settings.SettingsViewModel
 import com.stockq.feature.stockmovement.StockMovementScreen
@@ -156,6 +175,78 @@ fun StockQNavHost(
                 modifier = modifier
             )
         }
+        StockQDestination.SALES -> {
+            val salesViewModel: SalesViewModel = viewModel(factory = factory)
+            SalesScreen(
+                viewModel = salesViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.CUSTOMERS -> {
+            val customersViewModel: CustomersViewModel = viewModel(factory = factory)
+            CustomersScreen(
+                viewModel = customersViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.QUOTATIONS -> {
+            val quotationsViewModel: QuotationsViewModel = viewModel(factory = factory)
+            QuotationsScreen(
+                viewModel = quotationsViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.SERVICE_JOBS -> {
+            val serviceJobsViewModel: ServiceJobsViewModel = viewModel(factory = factory)
+            ServiceJobsScreen(
+                viewModel = serviceJobsViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.EXPENSES -> {
+            val expensesViewModel: ExpensesViewModel = viewModel(factory = factory)
+            ExpensesScreen(
+                viewModel = expensesViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.BATCHES -> {
+            val batchesViewModel: BatchesViewModel = viewModel(factory = factory)
+            BatchesScreen(
+                viewModel = batchesViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.EMPLOYEES -> {
+            val employeesViewModel: EmployeesViewModel = viewModel(factory = factory)
+            EmployeesScreen(
+                viewModel = employeesViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.REPORTS -> {
+            val reportsViewModel: ReportsViewModel = viewModel(factory = factory)
+            ReportsScreen(
+                viewModel = reportsViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
+        StockQDestination.DOCUMENTS -> {
+            val documentsViewModel: DocumentsViewModel = viewModel(factory = factory)
+            DocumentsScreen(
+                viewModel = documentsViewModel,
+                onNavigateBack = { navigateBack() },
+                modifier = modifier
+            )
+        }
         StockQDestination.SETTINGS -> {
             val settingsViewModel: SettingsViewModel = viewModel(factory = factory)
             SettingsScreen(
@@ -166,7 +257,9 @@ fun StockQNavHost(
             )
         }
         StockQDestination.BACKUP_RESTORE -> {
+            val backupViewModel: BackupRestoreViewModel = viewModel(factory = factory)
             BackupRestoreScreen(
+                viewModel = backupViewModel,
                 onNavigateBack = { navigateBack() },
                 modifier = modifier
             )
