@@ -1,6 +1,7 @@
 # StockQ — Offline-First Indian Retail & Inventory Management
 
-**Developer**: SuBZeRo  
+**Developer**: [SuBZeRo](https://dr-subzero.github.io/)  
+**Developer Website**: [dr-subzero.github.io](https://dr-subzero.github.io/)  
 **Application ID**: `com.subzero.stockq`  
 **Platform**: Native Android (Kotlin, Jetpack Compose, Material 3, Room SQLite)  
 **Target Market**: Indian Retail, Wholesalers & Shopkeepers  
